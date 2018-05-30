@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1048</width>
+    <height>581</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icon/icon</normaloff>:/icon/icon</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QSplitter" name="splitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab_map">
+        <attribute name="title">
+         <string>Map View</string>
+        </attribute>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QListWidget" name="data_listWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>160</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1048</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuProjects">
+    <property name="title">
+     <string>Survey</string>
+    </property>
+    <addaction name="actionSurvey"/>
+    <addaction name="actionNew"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuData">
+    <property name="title">
+     <string>Data</string>
+    </property>
+    <addaction name="actionImport_Multiple"/>
+    <addaction name="actionImport"/>
+    <addaction name="actionExport"/>
+    <addaction name="separator"/>
+    <addaction name="actionManage_wells"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionMap_view"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionSmooth_Log"/>
+    <addaction name="actionUpscale_Log"/>
+    <addaction name="actionDiscern_Shale"/>
+    <addaction name="actionExtrapolate_Log"/>
+    <addaction name="separator"/>
+    <addaction name="actionOBP"/>
+    <addaction name="actionNCT"/>
+    <addaction name="actionOptimize_Eaton"/>
+    <addaction name="actionEaton"/>
+    <addaction name="actionOptimize_Bowers"/>
+    <addaction name="actionBowers"/>
+    <addaction name="separator"/>
+    <addaction name="actionGardner"/>
+    <addaction name="actionCrossploter"/>
+    <addaction name="actionCalculator"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuProjects"/>
+   <addaction name="menuData"/>
+   <addaction name="menuView"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import Logs</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export Logs</string>
+   </property>
+  </action>
+  <action name="actionSurvey">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/survey_icon</normaloff>:/icon/survey_icon</iconset>
+   </property>
+   <property name="text">
+    <string>Setup/Select</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionMap_view">
+   <property name="text">
+    <string>Map view</string>
+   </property>
+  </action>
+  <action name="actionImport_Multiple">
+   <property name="text">
+    <string>Import Multiple Wells</string>
+   </property>
+  </action>
+  <action name="actionManage_wells">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/data_icon</normaloff>:/icon/data_icon</iconset>
+   </property>
+   <property name="text">
+    <string>Manage wells</string>
+   </property>
+  </action>
+  <action name="actionNCT">
+   <property name="text">
+    <string>NCT</string>
+   </property>
+  </action>
+  <action name="actionExtrapolate_Log">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/view_icon</normaloff>:/icon/view_icon</iconset>
+   </property>
+   <property name="text">
+    <string>Extrapolate upward</string>
+   </property>
+  </action>
+  <action name="actionCalculator">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/calculator</normaloff>:/icon/calculator</iconset>
+   </property>
+   <property name="text">
+    <string>Calculator</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionCrossploter">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/crossplot</normaloff>:/icon/crossplot</iconset>
+   </property>
+   <property name="text">
+    <string>Crossploter</string>
+   </property>
+  </action>
+  <action name="actionGardner">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/crossplot</normaloff>:/icon/crossplot</iconset>
+   </property>
+   <property name="text">
+    <string>Gardner</string>
+   </property>
+  </action>
+  <action name="actionOBP">
+   <property name="text">
+    <string>OBP</string>
+   </property>
+  </action>
+  <action name="actionDiscern_Shale">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/view_icon</normaloff>:/icon/view_icon</iconset>
+   </property>
+   <property name="text">
+    <string>Discern Shale</string>
+   </property>
+  </action>
+  <action name="actionUpscale_Log">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/view_icon</normaloff>:/icon/view_icon</iconset>
+   </property>
+   <property name="text">
+    <string>Upscale Log</string>
+   </property>
+  </action>
+  <action name="actionSmooth_Log">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/view_icon</normaloff>:/icon/view_icon</iconset>
+   </property>
+   <property name="text">
+    <string>Smooth Log</string>
+   </property>
+  </action>
+  <action name="actionOptimize_Eaton">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/lines</normaloff>:/icon/lines</iconset>
+   </property>
+   <property name="text">
+    <string>Coefficients(Eaton)</string>
+   </property>
+  </action>
+  <action name="actionPrediction">
+   <property name="text">
+    <string>Prediction</string>
+   </property>
+  </action>
+  <action name="actionCoefficients_Optimization_2">
+   <property name="text">
+    <string>Coefficients Optimization</string>
+   </property>
+  </action>
+  <action name="actionPrediction_2">
+   <property name="text">
+    <string>Prediction</string>
+   </property>
+  </action>
+  <action name="actionOptimize_Bowers">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/lines</normaloff>:/icon/lines</iconset>
+   </property>
+   <property name="text">
+    <string>Coefficients(Bowers)</string>
+   </property>
+  </action>
+  <action name="actionEaton">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/pressure</normaloff>:/icon/pressure</iconset>
+   </property>
+   <property name="text">
+    <string>Eaton</string>
+   </property>
+  </action>
+  <action name="actionBowers">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icon/pressure</normaloff>:/icon/pressure</iconset>
+   </property>
+   <property name="text">
+    <string>Bowers</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

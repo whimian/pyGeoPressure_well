@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="icon">
+    <file alias="lines">resources/img/icons8-line-chart-32.png</file>
+    <file alias="calculator">resources/img/icons8-calculator-32.png</file>
+    <file alias="crossplot">resources/img/icons8-scatter-plot-32.png</file>
+    <file alias="pressure">resources/img/icons8-pressure-gauge-32.png</file>
+    <file alias="icon">resources/img/well_icon_170_170.png</file>
+    <file alias="survey_icon">resources/img/survey_icon_512_512.png</file>
+    <file alias="save_icon">resources/img/icons8-save-32.png</file>
+    <file alias="save_as_icon">resources/img/icons8-save-as-32.png</file>
+    <file alias="rename_icon">resources/img/icons8-rename-32.png</file>
+    <file alias="delete_icon">resources/img/icons8-trash-32.png</file>
+    <file alias="view_icon">resources/img/icons8-polyline-32.png</file>
+    <file alias="import_icon">resources/img/icons8-import-32.png</file>
+    <file alias="edit_icon">resources/img/icons8-edit-property-32.png</file>
+    <file alias="create_icon">resources/img/icons8-plus-32.png</file>
+    <file alias="layer_icon">resources/img/icons8-layers-32.png</file>
+    <file alias="data_icon">resources/img/icons8-database-administrator-32.png</file>
+  </qresource>
+</RCC>
