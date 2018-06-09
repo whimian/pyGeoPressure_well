@@ -177,6 +177,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             "Author: yuhao\n" + \
             "E-mail: yuhao89@live.cn")
 
+    def closeEvent(self, event):
+        reply = QMessageBox.question(
+            self, 'Message',
+            "Are you sure to quit?", QMessageBox.Yes |
+            QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            save_config()
+            event.accept()
+        else:
+            event.ignore()
+
     @pyqtSlot()
     def create_well_manage_dialog(self):
         self.well_manage_dialog = WellManageDialog()
@@ -231,6 +243,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         bowers_dialog = BowersDialog()
         bowers_dialog.exec_()
 
+def save_config():
+    survey_path = Path(CONF.data_root) / CONF.current_survey
+    if survey_path.exists():
+        CONF.to_json(CONF.setting_abs_path)
 
 def start():
     # app = QApplication.instance()

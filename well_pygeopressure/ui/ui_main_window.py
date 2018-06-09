@@ -65,8 +65,6 @@ class Ui_MainWindow(object):
         self.menuProjects.setObjectName(_fromUtf8("menuProjects"))
         self.menuData = QtGui.QMenu(self.menubar)
         self.menuData.setObjectName(_fromUtf8("menuData"))
-        self.menuView = QtGui.QMenu(self.menubar)
-        self.menuView.setObjectName(_fromUtf8("menuView"))
         self.menuTools = QtGui.QMenu(self.menubar)
         self.menuTools.setObjectName(_fromUtf8("menuTools"))
         self.menuHelp = QtGui.QMenu(self.menubar)
@@ -161,7 +159,6 @@ class Ui_MainWindow(object):
         self.menuData.addAction(self.actionExport)
         self.menuData.addSeparator()
         self.menuData.addAction(self.actionManage_wells)
-        self.menuView.addAction(self.actionMap_view)
         self.menuTools.addAction(self.actionSmooth_Log)
         self.menuTools.addAction(self.actionUpscale_Log)
         self.menuTools.addAction(self.actionDiscern_Shale)
@@ -180,12 +177,12 @@ class Ui_MainWindow(object):
         self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuProjects.menuAction())
         self.menubar.addAction(self.menuData.menuAction())
-        self.menubar.addAction(self.menuView.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
+        QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -193,7 +190,6 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_map), _translate("MainWindow", "Map View", None))
         self.menuProjects.setTitle(_translate("MainWindow", "Survey", None))
         self.menuData.setTitle(_translate("MainWindow", "Data", None))
-        self.menuView.setTitle(_translate("MainWindow", "View", None))
         self.menuTools.setTitle(_translate("MainWindow", "Tools", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
         self.actionImport.setText(_translate("MainWindow", "Import Logs", None))
