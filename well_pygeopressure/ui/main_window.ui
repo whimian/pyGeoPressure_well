@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1048</width>
+    <width>1047</width>
     <height>581</height>
    </rect>
   </property>
@@ -71,7 +71,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1048</width>
+     <width>1047</width>
      <height>21</height>
     </rect>
    </property>
@@ -79,8 +79,8 @@
     <property name="title">
      <string>Survey</string>
     </property>
-    <addaction name="actionSurvey"/>
-    <addaction name="actionNew"/>
+    <addaction name="actionSelectSurvey"/>
+    <addaction name="actionNewSurvey"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -136,7 +136,7 @@
     <string>Export Logs</string>
    </property>
   </action>
-  <action name="actionSurvey">
+  <action name="actionSelectSurvey">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/icon/survey_icon</normaloff>:/icon/survey_icon</iconset>
@@ -150,7 +150,7 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionNew">
+  <action name="actionNewSurvey">
    <property name="text">
     <string>New</string>
    </property>

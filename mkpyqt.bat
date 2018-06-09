@@ -6,6 +6,8 @@ pyrcc4.exe -o ui/resources_rc.py resources.qrc
 REM generate ui file
 CD ui
 CALL pyuic4.bat -o ui_main_window.py main_window.ui
+CALL pyuic4.bat -o ui_survey_edit.py survey_edit.ui
+CALL pyuic4.bat -o ui_survey_select.py survey_select.ui
 CALL pyuic4.bat -o ui_well_manage_dialog.py well_manage_dialog.ui
 CALL pyuic4.bat -o ui_well_marker_dialog.py well_marker_dialog.ui
 CALL pyuic4.bat -o ui_import_multiple_wells_dialog.py import_multiple_wells_dialog.ui

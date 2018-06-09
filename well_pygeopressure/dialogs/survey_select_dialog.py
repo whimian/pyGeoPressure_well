@@ -9,16 +9,19 @@ from __future__ import (division, absolute_import, print_function,
 
 __author__ = "Yu Hao"
 
+from future.builtins import str as newstr
+
 from pathlib2 import Path
 from PyQt4.QtGui import QIcon, QDialog, QFileDialog
 from PyQt4 import uic, QtCore
 
 from ..basic.utils import get_available_survey_dir
-from ..basic.survey_setting import SurveySetting
+# from ..basic.survey_setting import SurveySetting
 from ..widgets.survey_map_widget import SurveyMap
 from ..ui.ui_survey_select import Ui_surveySelectDialog
 
-from pygeopressure_gui.config import CONF
+from well_pygeopressure.config import CONF
+import pygeopressure as ppp
 
 
 class SurveySelectDialog(QDialog, Ui_surveySelectDialog):
@@ -35,7 +38,6 @@ class SurveySelectDialog(QDialog, Ui_surveySelectDialog):
         self.load_survey_list()
 
     def initUI(self):
-        # uic.loadUi('pygeopressure_gui/ui/survey_select.ui', self)
         self.setWindowIcon(QIcon(':/icon/survey_icon'))
         self.survey_map = SurveyMap(self)
         self.gridLayout.addWidget(self.survey_map)
@@ -72,7 +74,7 @@ class SurveySelectDialog(QDialog, Ui_surveySelectDialog):
         survey_folder = str(self.surveyListWidget.selectedItems()[0].text())
         survey_file = Path(CONF.data_root, survey_folder, '.survey')
         # create new survey
-        new_survey = SurveySetting(survey_file)
+        new_survey = ppp.SurveySetting(ppp.ThreePoints(newstr(survey_file)))
         # build survey info string for display
         info_string = \
             "In-line range: {} - {} - {}\n".format(

@@ -11,19 +11,18 @@ from __future__ import (division, absolute_import, print_function,
 __author__ = "Yu Hao"
 
 import sys
-from os import path
 
 from PyQt4.QtGui import QIcon, QDialog, QFileDialog, QMessageBox, QWidget
 from PyQt4 import uic
 
-from pygeopressure_gui.basic.utils import (read_survey_setting,
+from well_pygeopressure.basic.utils import (read_survey_setting,
                                            discern_setting_from_gui,
                                            create_survey_directory,
                                            write_survey_file)
-from pygeopressure_gui.ui.ui_survey_edit import Ui_surveyEditDialog
-from pygeopressure_gui.config import CONF
+from well_pygeopressure.ui.ui_survey_edit import Ui_surveyEditDialog
+from well_pygeopressure.config import CONF
 
-from pygeopressure_gui import Path
+from pathlib2 import Path
 
 
 class SurveyEditDialog(QDialog, Ui_surveyEditDialog):
@@ -37,7 +36,6 @@ class SurveyEditDialog(QDialog, Ui_surveyEditDialog):
         self.applyButton.clicked.connect(self.create_new_survey)
 
     def initUI(self):
-        # uic.loadUi('pygeopressure_gui/ui/survey_edit.ui', self)
         self.setWindowIcon(QIcon(':/icon/survey_icon'))
         self.settingComboBox.addItems(['Enter Below',
                                        'From File'])

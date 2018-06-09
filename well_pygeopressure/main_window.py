@@ -41,8 +41,9 @@ import pygeopressure as ppp
 
 from well_pygeopressure.ui.ui_main_window import Ui_MainWindow
 import well_pygeopressure.ui.resources_rc
-# from pygeopressure_gui.ui.ui_pygeopressure import Ui_MainWindow
-# # import Dialogs
+# import Dialogs
+from well_pygeopressure.dialogs.survey_edit_dialog import SurveyEditDialog
+from well_pygeopressure.dialogs.survey_select_dialog import SurveySelectDialog
 from well_pygeopressure.dialogs.well_manage_dialog import WellManageDialog
 from well_pygeopressure.dialogs.import_multiple_wells_dialog import (
     ImportMultipleWellsDialog)
@@ -68,7 +69,6 @@ from well_pygeopressure.basic.utils import (get_data_files, Seismic,
 
 from well_pygeopressure.config import CONF
 
-
 # Main Window =================================================================
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -78,6 +78,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.initUI()
         # connect slots -------------------------------------------------------
         # menu actions
+        self.actionNewSurvey.triggered.connect(self.create_survey_edit_dialog)
+        self.actionSelectSurvey.triggered.connect(
+            self.create_survey_select_dialog)
         self.actionAbout.triggered.connect(self.show_about)
         self.actionManage_wells.triggered.connect(
             self.create_well_manage_dialog)
@@ -188,6 +191,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             event.accept()
         else:
             event.ignore()
+
+    def create_survey_edit_dialog(self):
+        survey_edit_window = SurveyEditDialog()
+        survey_edit_window.exec_()
+
+    def create_survey_select_dialog(self):
+        survey_select_dialog = SurveySelectDialog()
+        survey_select_dialog.selectButton.clicked.connect(
+            self.populate_data_list)
+        survey_select_dialog.exec_()
 
     @pyqtSlot()
     def create_well_manage_dialog(self):

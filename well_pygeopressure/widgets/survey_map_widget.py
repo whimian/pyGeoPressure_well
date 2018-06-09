@@ -8,8 +8,8 @@ from __future__ import division, absolute_import, unicode_literals
 
 __author__ = "Yu Hao"
 
-from pyface.qt.QtGui import QWidget, QPainter, QPen
-from pyface.qt.QtCore import QPoint, Qt
+from PyQt4.QtGui import QWidget, QPainter, QPen
+from PyQt4.QtCore import QPoint, Qt
 
 
 class SurveyMap(QWidget):
