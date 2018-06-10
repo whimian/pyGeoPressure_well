@@ -11,12 +11,15 @@ __author__ = "Yu Hao"
 
 from pathlib2 import Path
 from PyQt4.QtGui import (QIcon, QDialog, QFileDialog, QListWidgetItem,
-                         QTableWidgetItem, QGridLayout, )
+                         QTableWidgetItem, QGridLayout, QInputDialog,
+                         QLineEdit)
 from PyQt4.QtCore import Qt, pyqtSlot, QSize
 
 from well_pygeopressure.ui.ui_well_manage_dialog import Ui_well_manage_Dialog
 from well_pygeopressure.dialogs.well_log_view_dialog import WellLogViewDialog
 from well_pygeopressure.dialogs.well_marker_dialog import WellMarkerDialog
+from well_pygeopressure.dialogs.import_multiple_wells_dialog import (
+    ImportMultipleWellsDialog)
 
 from well_pygeopressure.basic.utils import get_data_files
 from well_pygeopressure.config import CONF
@@ -38,33 +41,12 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
         self.wells_listWidget.currentRowChanged.connect(self.write_info)
         self.view_log_Button.clicked.connect(self.on_clicked_view_log_Button)
         self.layer_well_Button.clicked.connect(self.open_marker_edit_dialog)
+        self.import_well_Button.clicked.connect(self.import_well)
+        self.rename_log_Button.clicked.connect(self.rename_log)
         # self.selectButton.clicked.connect(self.on_clicked_selectButton)
 
     def initUI(self):
-        # self.setWindowIcon(QIcon(':/icon/data_icon'))
-
         self.populate_well_listWidget()
-        # self.rename_well_Button.setIcon(QIcon(':/icon/rename_icon'))
-        # self.rename_well_Button.setIconSize(QSize(20, 20))
-        # self.delete_well_Button.setIcon(QIcon(':/icon/delete_icon'))
-        # self.delete_well_Button.setIconSize(QSize(20, 20))
-        # self.import_well_Button.setIcon(QIcon(':/icon/import_icon'))
-        # self.import_well_Button.setIconSize(QSize(20, 20))
-        # self.layer_well_Button.setIcon(QIcon(':/icon/layer_icon'))
-        # self.layer_well_Button.setIconSize(QSize(20, 20))
-        # # ---
-        # self.rename_log_Button.setIcon(QIcon(':/icon/rename_icon'))
-        # self.rename_log_Button.setIconSize(QSize(20, 20))
-        # self.delete_log_Button.setIcon(QIcon(':/icon/delete_icon'))
-        # self.delete_log_Button.setIconSize(QSize(20, 20))
-        # self.view_log_Button.setIcon(QIcon(':/icon/view_icon'))
-        # self.view_log_Button.setIconSize(QSize(20, 20))
-        # self.import_log_Button.setIcon(QIcon(':/icon/import_icon'))
-        # self.import_log_Button.setIconSize(QSize(20, 20))
-        # self.edit_log_Button.setIcon(QIcon(':/icon/edit_icon'))
-        # self.edit_log_Button.setIconSize(QSize(20, 20))
-        # self.create_log_Button.setIcon(QIcon(':/icon/create_icon'))
-        # self.create_log_Button.setIconSize(QSize(20, 20))
 
     def populate_well_listWidget(self):
         survey_file = CONF.survey_dir / '.survey'
@@ -112,6 +94,57 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
                     0, 1, QTableWidgetItem(str(well.params[name])))
         self.saved_info_tableWidget.sortItems(0, Qt.AscendingOrder)
 
+
+    # WELL PANEL --------------------------------------------------------------
+    def rename_well(self):
+        pass
+
+    def delete_well(self):
+        pass
+
+    def import_well(self):
+        import_multiple_wells_dialog = ImportMultipleWellsDialog()
+        import_multiple_wells_dialog.exec_()
+
+    def export_well(self):
+        pass
+
+    def open_marker_edit_dialog(self):
+        well = ppp.Well(
+            str(CONF.well_dir / ".{}".format(
+                self.wells_listWidget.currentItem().text())))
+        marker_edit_dialog = WellMarkerDialog(well)
+        marker_edit_dialog.exec_()
+
+    # LOG PANEL ---------------------------------------------------------------
+    def rename_log(self):
+        if self.logs_listWidget.currentItem() is not None:
+            well = ppp.Well(
+                str(CONF.well_dir / ".{}".format(
+                    self.wells_listWidget.currentItem().text())))
+            current_log_name = str(self.logs_listWidget.currentItem().text())
+
+            text, ok = QInputDialog.getText(
+                self, "Rename Log", "Rename \"{}\"".format(current_log_name),
+                QLineEdit.Normal, current_log_name)
+            if ok and text:
+                new_log_name = str(text)
+                well.rename_log(current_log_name, new_log_name)
+                well.save_well()
+                # old_current = self.wells_listWidget.currentRow()
+                # self.populate_well_listWidget()
+                # self.wells_listWidget.setCurrentRow(old_current)
+                self.populate_log_listWidget(self.wells_listWidget.currentRow())
+
+    def delete_log(self):
+        pass
+
+    def import_log(self):
+        pass
+
+    def export_log(self):
+        pass
+
     def on_clicked_view_log_Button(self):
         if self.logs_listWidget.currentItem() is not None:
             well = ppp.Well(
@@ -123,9 +156,8 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
             viewer = WellLogViewDialog(well_log)
             viewer.exec_()
 
-    def open_marker_edit_dialog(self):
-        well = ppp.Well(
-            str(CONF.well_dir / ".{}".format(
-                self.wells_listWidget.currentItem().text())))
-        marker_edit_dialog = WellMarkerDialog(well)
-        marker_edit_dialog.exec_()
+    def edit_log(self):
+        pass
+
+    def create_log(self):
+        pass

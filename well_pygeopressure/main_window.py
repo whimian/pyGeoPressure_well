@@ -105,23 +105,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.create_optimize_bowers_dialog)
         self.actionBowers.triggered.connect(
             self.create_bowers_dialog)
-        # # toolbox
-        # # update ui
-        # self.toolBox.currentChanged.connect(
-        #     self.update_velocity_conversion_panel)
-        # self.toolBox.currentChanged.connect(self.update_tdc_panel)
-        # self.toolBox.currentChanged.connect(self.update_density_panel)
-        # self.toolBox.currentChanged.connect(self.update_obp_panel)
-        # self.toolBox.currentChanged.connect(self.update_eaton_panel)
-        # self.toolBox.currentChanged.connect(self.update_bowers_panel)
-        # # buttons
-        # self.runButton_Velocity_Conversion.clicked.connect(
-        #     self.run_velocity_conversion)
-        # self.runButton_gardner.clicked.connect(self.run_density_conversion)
-        # self.runButton_OBP.clicked.connect(self.run_obp_calculation)
-        # self.runButton_Eaton.clicked.connect(self.run_eaton_calculation)
-        # self.runButton_Bowers.clicked.connect(self.run_bowers_calculation)
-
         # # Data Tree
         self.data_listWidget.itemClicked.connect(self.handleItemChecked)
         # # self.statusBar().showMessage("System Status | Normal")
@@ -148,7 +131,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 well_names.append(item.text())
         self.map_view.draw_well_loc(x, y, well_names)
 
-
     def create_map_view(self):
         layout = QGridLayout(self.tab_map)
         self.map_view = MapView(self.tab_map)
@@ -166,6 +148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def populate_data_list(self):
         survey_file = CONF.survey_dir / '.survey'
         if survey_file.exists():
+            self.data_listWidget.clear()
             for name in get_data_files(CONF.well_dir):
                 new_item = QListWidgetItem(name, self.data_listWidget)
                 new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)

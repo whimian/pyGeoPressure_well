@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file alias="export">resources/img/icons8-export-32.png</file>
     <file alias="lines">resources/img/icons8-line-chart-32.png</file>
     <file alias="calculator">resources/img/icons8-calculator-32.png</file>
     <file alias="crossplot">resources/img/icons8-scatter-plot-32.png</file>

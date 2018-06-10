@@ -34,10 +34,13 @@ class WellMarkerDialog(QDialog, Ui_well_marker_Dialog):
         self.populate_marker_table()
 
     def populate_marker_table(self):
-        markers_dict = self.well.params["horizon"]
-        for mark in markers_dict.keys():
-            self.tableWidget.insertRow(0)
-            self.tableWidget.setItem(0, 0, QTableWidgetItem(mark))
-            self.tableWidget.setItem(0, 1, QTableWidgetItem(str(markers_dict[mark])))
-            self.tableWidget.setItem(0, 2, QTableWidgetItem(str(markers_dict[mark])))
-        self.tableWidget.sortItems(0, Qt.AscendingOrder)
+        try:
+            markers_dict = self.well.params["horizon"]
+            for mark in markers_dict.keys():
+                self.tableWidget.insertRow(0)
+                self.tableWidget.setItem(0, 0, QTableWidgetItem(mark))
+                self.tableWidget.setItem(0, 1, QTableWidgetItem(str(markers_dict[mark])))
+                self.tableWidget.setItem(0, 2, QTableWidgetItem(str(markers_dict[mark])))
+            self.tableWidget.sortItems(0, Qt.AscendingOrder)
+        except KeyError:
+            pass
