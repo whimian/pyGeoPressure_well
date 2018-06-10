@@ -12,7 +12,7 @@ __author__ = "Yu Hao"
 from pathlib2 import Path
 from PyQt4.QtGui import (QIcon, QDialog, QFileDialog, QListWidgetItem,
                          QTableWidgetItem, QGridLayout, QInputDialog,
-                         QLineEdit)
+                         QLineEdit, QMessageBox)
 from PyQt4.QtCore import Qt, pyqtSlot, QSize
 
 from well_pygeopressure.ui.ui_well_manage_dialog import Ui_well_manage_Dialog
@@ -43,7 +43,7 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
         self.layer_well_Button.clicked.connect(self.open_marker_edit_dialog)
         self.import_well_Button.clicked.connect(self.import_well)
         self.rename_log_Button.clicked.connect(self.rename_log)
-        # self.selectButton.clicked.connect(self.on_clicked_selectButton)
+        self.delete_log_Button.clicked.connect(self.delete_log)
 
     def initUI(self):
         self.populate_well_listWidget()
@@ -125,7 +125,7 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
             current_log_name = str(self.logs_listWidget.currentItem().text())
 
             text, ok = QInputDialog.getText(
-                self, "Rename Log", "Rename \"{}\"".format(current_log_name),
+                self, "Rename Log", "Rename '{}'".format(current_log_name),
                 QLineEdit.Normal, current_log_name)
             if ok and text:
                 new_log_name = str(text)
@@ -137,7 +137,21 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
                 self.populate_log_listWidget(self.wells_listWidget.currentRow())
 
     def delete_log(self):
-        pass
+        if self.logs_listWidget.currentItem() is not None:
+            well = ppp.Well(
+                str(CONF.well_dir / ".{}".format(
+                    self.wells_listWidget.currentItem().text())))
+            current_log_name = str(self.logs_listWidget.currentItem().text())
+
+            reply = QMessageBox.question(
+                self, "Delete Log",
+                "Are you sure to delete log \n'{}'?".format(current_log_name),
+                QMessageBox.Yes, QMessageBox.Cancel)
+
+            if reply == QMessageBox.Yes:
+                well.drop_log(current_log_name)
+                well.save_well()
+                self.populate_log_listWidget(self.wells_listWidget.currentRow())
 
     def import_log(self):
         pass
