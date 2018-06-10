@@ -20,6 +20,7 @@ from well_pygeopressure.dialogs.well_log_view_dialog import WellLogViewDialog
 from well_pygeopressure.dialogs.well_marker_dialog import WellMarkerDialog
 from well_pygeopressure.dialogs.import_multiple_wells_dialog import (
     ImportMultipleWellsDialog)
+from well_pygeopressure.dialogs.import_logs_dialog import ImportLogsDialog
 
 from well_pygeopressure.basic.utils import get_data_files
 from well_pygeopressure.config import CONF
@@ -44,6 +45,7 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
         self.import_well_Button.clicked.connect(self.import_well)
         self.rename_log_Button.clicked.connect(self.rename_log)
         self.delete_log_Button.clicked.connect(self.delete_log)
+        self.import_log_Button.clicked.connect(self.import_log)
 
     def initUI(self):
         self.populate_well_listWidget()
@@ -154,7 +156,9 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
                 self.populate_log_listWidget(self.wells_listWidget.currentRow())
 
     def import_log(self):
-        pass
+        current_well = self.wells_listWidget.currentItem().text()
+        import_logs_dialog = ImportLogsDialog(current_well)
+        import_logs_dialog.exec_()
 
     def export_log(self):
         pass

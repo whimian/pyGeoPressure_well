@@ -25,9 +25,10 @@ import pygeopressure as ppp
 
 
 class ImportLogsDialog(QDialog, Ui_import_logs_Dialog):
-    def __init__(self):
+    def __init__(self, current_well = None):
         super(ImportLogsDialog, self).__init__()
         self.setupUi(self)
+        self.current_well = current_well
         self.initUI()
         self.fl_name = None
         self.las_object = None
@@ -44,22 +45,29 @@ class ImportLogsDialog(QDialog, Ui_import_logs_Dialog):
         if survey_file.exists():
             dnames = get_data_files(CONF.well_dir)
             self.wells_comboBox.addItems(dnames)
+        if self.current_well is not None:
+            index = self.wells_comboBox.findText(str(self.current_well))
+            if index != -1:
+                self.wells_comboBox.setCurrentIndex(index)
 
     @pyqtSlot()
     def select_file(self):
-        self.fl_name = str(QFileDialog.getOpenFileName(self, "Open File"))
-        self.file_lineEdit.setText(self.fl_name)
-        self.read_las_file()
-        for name, unit in zip(self.logs, self.units):
-            self.tableWidget.insertRow(0)
-            self.tableWidget.setItem(
-                0, 0, QTableWidgetItem(name))
-            new_item = self.tableWidget.item(0, 0)
-            new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
-            new_item.setCheckState(Qt.Unchecked)
+        fl = str(QFileDialog.getOpenFileName(self, "Open File"))
+        if fl:
+            self.fl_name = fl
 
-            self.tableWidget.setItem(
-                0, 1, QTableWidgetItem(unit))
+            self.file_lineEdit.setText(self.fl_name)
+            self.read_las_file()
+            for name, unit in zip(self.logs, self.units):
+                self.tableWidget.insertRow(0)
+                self.tableWidget.setItem(
+                    0, 0, QTableWidgetItem(name))
+                new_item = self.tableWidget.item(0, 0)
+                new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
+                new_item.setCheckState(Qt.Unchecked)
+
+                self.tableWidget.setItem(
+                    0, 1, QTableWidgetItem(unit))
 
     def read_las_file(self):
         self.las_object = ppp.LasData(self.fl_name)
