@@ -12,7 +12,8 @@ __author__ = "Yu Hao"
 from pathlib2 import Path
 from PyQt4.QtGui import (QIcon, QDialog, QFileDialog, QListWidgetItem,
                          QTableWidgetItem, QGridLayout, QInputDialog,
-                         QLineEdit, QMessageBox)
+                         QLineEdit, QMessageBox, QTableWidget,
+                         QDialogButtonBox)
 from PyQt4.QtCore import Qt, pyqtSlot, QSize
 
 from well_pygeopressure.ui.ui_well_manage_dialog import Ui_well_manage_Dialog
@@ -46,6 +47,7 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
         self.rename_log_Button.clicked.connect(self.rename_log)
         self.delete_log_Button.clicked.connect(self.delete_log)
         self.import_log_Button.clicked.connect(self.import_log)
+        self.edit_log_Button.clicked.connect(self.edit_log)
 
     def initUI(self):
         self.populate_well_listWidget()
@@ -175,7 +177,60 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
             viewer.exec_()
 
     def edit_log(self):
-        pass
+        if self.logs_listWidget.currentItem() is not None:
+            well = ppp.Well(
+                str(CONF.well_dir / ".{}".format(
+                    self.wells_listWidget.currentItem().text())))
+            current_log_name = str(self.logs_listWidget.currentItem().text())
+            well_log = well.get_log(current_log_name)
+
+            self.edit_dialog = QDialog(self)
+            self.edit_dialog.setWindowTitle("Edit Log {}".format(current_log_name))
+            # add a QTableWidget
+            layout = QGridLayout(self.edit_dialog)
+            tableWidget = QTableWidget(self.edit_dialog)
+            tableWidget.setColumnCount(2)
+            tableWidget.setRowCount(0)
+            tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("Depth"))
+            tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("Data"))
+            layout.addWidget(tableWidget)
+            button_box = QDialogButtonBox(self.edit_dialog)
+            button_box.setStandardButtons(
+                QDialogButtonBox.Save|QDialogButtonBox.Cancel)
+            layout.addWidget(button_box)
+            n = len(well_log.depth)
+            tableWidget.setRowCount(n)
+            for i, (de, da) in enumerate(zip(well_log.depth, well_log.data)):
+                tableWidget.setItem(i, 0, QTableWidgetItem(str(de)))
+                tableWidget.setItem(i, 1, QTableWidgetItem(str(da)))
+            # tableWidget.sortItems(0, Qt.AscendingOrder)
+            button_box.accepted.connect(self.save_edit)
+            button_box.rejected.connect(self.edit_dialog.close)
+            self.edit_dialog.exec_()
+
+    def save_edit(self):
+        well = ppp.Well(
+            str(CONF.well_dir / ".{}".format(
+                self.wells_listWidget.currentItem().text())))
+        current_log_name = str(self.logs_listWidget.currentItem().text())
+        well_log = well.get_log(current_log_name)
+        tableWidget = self.edit_dialog.findChild(QTableWidget)
+        depth_tb = [float(tableWidget.item(irow, 0).text()) \
+            for irow in range(tableWidget.rowCount())]
+        data_tb = [float(tableWidget.item(irow, 1).text()) \
+            for irow in range(tableWidget.rowCount())]
+        temp_log = ppp.Log()
+        temp_log.depth = depth_tb
+        temp_log.data = data_tb
+        if temp_log != well_log:
+            reply = QMessageBox.question(
+                self, "Save",
+                "Log Data has been edited,\nAre you willing to save changes?",
+                QMessageBox.Yes, QMessageBox.Cancel)
+            if reply == QMessageBox.Yes:
+                well.update_log(current_log_name, temp_log)
+                well.save_well()
+        self.edit_dialog.close()
 
     def create_log(self):
         pass
