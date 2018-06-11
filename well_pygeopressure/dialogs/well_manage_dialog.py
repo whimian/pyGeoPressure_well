@@ -16,13 +16,13 @@ from PyQt4.QtGui import (QIcon, QDialog, QFileDialog, QListWidgetItem,
                          QDialogButtonBox)
 from PyQt4.QtCore import Qt, pyqtSlot, QSize
 
-from well_pygeopressure.ui.ui_well_manage_dialog import Ui_well_manage_Dialog
+from ..ui.ui_well_manage_dialog import Ui_well_manage_Dialog
 from well_pygeopressure.dialogs.well_log_view_dialog import WellLogViewDialog
 from well_pygeopressure.dialogs.well_marker_dialog import WellMarkerDialog
-from well_pygeopressure.dialogs.import_multiple_wells_dialog import (
-    ImportMultipleWellsDialog)
+from ..dialogs.import_multiple_wells_dialog import ImportMultipleWellsDialog
 from well_pygeopressure.dialogs.import_logs_dialog import ImportLogsDialog
 from well_pygeopressure.dialogs.well_log_edit_dialog import WellLogEditDialog
+from ..dialogs.well_log_export_dialog import WellLogExportDialog
 
 from well_pygeopressure.basic.utils import get_data_files
 from well_pygeopressure.config import CONF
@@ -49,6 +49,7 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
         self.delete_log_Button.clicked.connect(self.delete_log)
         self.import_log_Button.clicked.connect(self.import_log)
         self.edit_log_Button.clicked.connect(self.edit_log)
+        self.export_log_Button.clicked.connect(self.export_log)
 
     def initUI(self):
         self.populate_well_listWidget()
@@ -164,7 +165,15 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
         import_logs_dialog.exec_()
 
     def export_log(self):
-        pass
+        if self.logs_listWidget.currentItem() is not None:
+            well = ppp.Well(
+                str(CONF.well_dir / ".{}".format(
+                    self.wells_listWidget.currentItem().text())))
+            well_log = well.get_log(
+                str(self.logs_listWidget.currentItem().text()))
+            export_dialog = WellLogExportDialog(well_log)
+            export_dialog.exec_()
+
 
     def on_clicked_view_log_Button(self):
         if self.logs_listWidget.currentItem() is not None:
@@ -173,7 +182,6 @@ class WellManageDialog(QDialog, Ui_well_manage_Dialog):
                     self.wells_listWidget.currentItem().text())))
             well_log = well.get_log(
                 str(self.logs_listWidget.currentItem().text()))
-            # create a viewer on the fly
             viewer = WellLogViewDialog(well_log)
             viewer.exec_()
 
