@@ -90,7 +90,7 @@
     </property>
     <addaction name="actionImport_Multiple"/>
     <addaction name="actionImport"/>
-    <addaction name="actionExport"/>
+    <addaction name="actionExportWells"/>
     <addaction name="separator"/>
     <addaction name="actionManage_wells"/>
    </widget>
@@ -131,9 +131,9 @@
     <string>Import Logs</string>
    </property>
   </action>
-  <action name="actionExport">
+  <action name="actionExportWells">
    <property name="text">
-    <string>Export Logs</string>
+    <string>Export Wells</string>
    </property>
   </action>
   <action name="actionSelectSurvey">

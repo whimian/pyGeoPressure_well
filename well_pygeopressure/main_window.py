@@ -48,6 +48,7 @@ from well_pygeopressure.dialogs.well_manage_dialog import WellManageDialog
 from well_pygeopressure.dialogs.import_multiple_wells_dialog import (
     ImportMultipleWellsDialog)
 from well_pygeopressure.dialogs.import_logs_dialog import ImportLogsDialog
+from well_pygeopressure.dialogs.well_export_dialog import WellExportDialog
 from well_pygeopressure.dialogs.nct_dialog import NctDialog
 from well_pygeopressure.dialogs.discern_shale_dialog import DiscernShaleDialog
 from well_pygeopressure.dialogs.upscale_dialog import UpscaleDialog
@@ -88,6 +89,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.create_import_multiple_wells_dialog)
         self.actionImport.triggered.connect(
             self.create_import_logs_dialog)
+        self.actionExportWells.triggered.connect(self.export_well)
         self.actionDiscern_Shale.triggered.connect(self.create_shale_dialog)
         self.actionNCT.triggered.connect(self.create_nct_dialog)
         self.actionSmooth_Log.triggered.connect(
@@ -198,6 +200,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def create_import_logs_dialog(self):
         import_logs_dialog = ImportLogsDialog()
         import_logs_dialog.exec_()
+
+    def export_well(self):
+        export_well_dialog = WellExportDialog()
+        export_well_dialog.exec_()
 
     def create_nct_dialog(self):
         nct_dialog = NctDialog()
