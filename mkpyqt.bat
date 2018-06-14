@@ -9,8 +9,8 @@ CALL pyuic4.bat -o ui_main_window.py main_window.ui
 CALL pyuic4.bat -o ui_survey_edit.py survey_edit.ui
 CALL pyuic4.bat -o ui_survey_select.py survey_select.ui
 CALL pyuic4.bat -o ui_well_manage_dialog.py well_manage_dialog.ui
-CALL pyuic4.bat -o ui_well_marker_dialog.py well_marker_dialog.ui
-CALL pyuic4.bat -o ui_import_multiple_wells_dialog.py import_multiple_wells_dialog.ui
+REM CALL pyuic4.bat -o ui_well_marker_dialog.py well_marker_dialog.ui
+CALL pyuic4.bat -o ui_read_csv_dialog.py read_csv_dialog.ui
 CALL pyuic4.bat -o ui_read_multiple_wells_from_file_dialog.py read_multiple_wells_from_file_dialog.ui
 CALL pyuic4.bat -o ui_format_definition_dialog.py format_definition_dialog.ui
 CALL pyuic4.bat -o ui_import_logs_dialog.py import_logs_dialog.ui

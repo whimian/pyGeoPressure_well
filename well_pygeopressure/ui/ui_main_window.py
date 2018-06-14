@@ -198,7 +198,7 @@ class Ui_MainWindow(object):
         self.actionExit.setText(_translate("MainWindow", "Exit", None))
         self.actionNewSurvey.setText(_translate("MainWindow", "New", None))
         self.actionMap_view.setText(_translate("MainWindow", "Map view", None))
-        self.actionImport_Multiple.setText(_translate("MainWindow", "Import Multiple Wells", None))
+        self.actionImport_Multiple.setText(_translate("MainWindow", "Create Multiple Wells", None))
         self.actionManage_wells.setText(_translate("MainWindow", "Manage wells", None))
         self.actionNCT.setText(_translate("MainWindow", "NCT", None))
         self.actionExtrapolate_Log.setText(_translate("MainWindow", "Extrapolate upward", None))

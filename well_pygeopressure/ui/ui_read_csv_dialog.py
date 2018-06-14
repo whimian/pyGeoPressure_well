@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'read_multiple_wells_from_file_dialog.ui'
+# Form implementation generated from reading ui file 'read_csv_dialog.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #

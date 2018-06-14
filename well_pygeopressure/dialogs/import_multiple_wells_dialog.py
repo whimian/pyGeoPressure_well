@@ -17,8 +17,9 @@ from PyQt4.QtCore import Qt, pyqtSlot
 
 from well_pygeopressure.ui.ui_import_multiple_wells_dialog import (
     Ui_import_multiple_wells_Dialog)
-from well_pygeopressure.dialogs.read_multiple_wells_from_file_dialog import (
-    ReadMultipleWellsFromFileDialog)
+# from well_pygeopressure.dialogs.read_multiple_wells_from_file_dialog import (
+#     ReadMultipleWellsFromFileDialog)
+from well_pygeopressure.dialogs.read_csv_dialog import ReadCsvDialog
 from well_pygeopressure.basic.utils import get_data_files
 from well_pygeopressure.config import CONF
 import well_pygeopressure.ui.resources_rc
@@ -40,7 +41,9 @@ class ImportMultipleWellsDialog(QDialog, Ui_import_multiple_wells_Dialog):
         # self.populate_marker_table()
 
     def open_read_from_file_dialog(self):
-        read_multiple = ReadMultipleWellsFromFileDialog()
+        # read_multiple = ReadMultipleWellsFromFileDialog()
+        read_multiple = ReadCsvDialog()
+        read_multiple.setWindowTitle("Read Multiple Wells From File")
         read_multiple.file_read.connect(self.display_wells)
         read_multiple.exec_()
 

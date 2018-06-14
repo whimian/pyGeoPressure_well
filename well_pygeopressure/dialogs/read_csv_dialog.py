@@ -11,11 +11,12 @@ __author__ = "Yu Hao"
 
 from pathlib2 import Path
 from PyQt4.QtGui import (QIcon, QDialog, QFileDialog, QListWidgetItem,
-                         QTableWidgetItem, QGridLayout, QTextEdit)
-from PyQt4.QtCore import Qt, pyqtSlot, pyqtSignal
+                         QTableWidgetItem, QGridLayout, QTextEdit,
+                         QLabel, QLineEdit, QPushButton, QSpinBox)
+from PyQt4.QtCore import Qt, pyqtSlot, pyqtSignal, QRect
 
-from well_pygeopressure.ui.ui_read_multiple_wells_from_file_dialog import (
-    Ui_read_multiple_wells_from_file_Dialog)
+from well_pygeopressure.ui.ui_read_csv_dialog import (
+    Ui_read_csv_Dialog)
 from well_pygeopressure.dialogs.format_definition_dialog import (
     FormatDefinitionDialog)
 from well_pygeopressure.basic.utils import get_data_files
@@ -27,13 +28,12 @@ from pandas import DataFrame
 import pygeopressure as ppp
 
 
-class ReadMultipleWellsFromFileDialog(
-        QDialog, Ui_read_multiple_wells_from_file_Dialog):
+class ReadCsvDialog(QDialog, Ui_read_csv_Dialog):
 
     file_read = pyqtSignal(list)
 
     def __init__(self):
-        super(ReadMultipleWellsFromFileDialog, self).__init__()
+        super(ReadCsvDialog, self).__init__()
         self.setupUi(self)
         self.initUI()
 
@@ -45,8 +45,34 @@ class ReadMultipleWellsFromFileDialog(
         self.examineButton.clicked.connect(self.preview_file)
         self.buttonBox.accepted.connect(self.read_selected_file)
 
+    # def setupUi(self):
+        # self.setWindowIcon(QIcon(':/icon/icon'))
+        # self.setWindowTitle("Read CSV file")
+        # self.gridLayout = QGridLayout(self)
+        # # row 1
+        # self.label = QLabel("Create Multiple Wells", self, Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        # self.gridLayout.addWidget(self.label, 0, 0, 1, 5)
+        # # row 2
+        # self.label_0.setGeometry(QRect(0, 24, 91, 20))
+        # self.label_0.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        # self.gridLayout.addWidget(self.label_0, 1, 0, 1, 1)
+        # self.file_lineEdit = QLineEdit(self)
+        # self.gridLayout.addWidget(self.file_lineEdit, 1, 1, 1, 2)
+        # self.selectButton = QPushButton("Select", self)
+        # self.gridLayout.addWidget(self.selectButton, 1, 3, 1, 1)
+        # self.examineButton = QPushButton("Examine", self)
+        # self.gridLayout.addWidget(self.selectButton, 1, 4, 1, 1)
+        # # row 3
+        # self.label_1.setGeometry(QRect(0, 24, 91, 20))
+        # self.label_1.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        # self.gridLayout.addWidget(self.label_1, 2, 0, 1, 1)
+        # self.header_size_spinBox = QSpinBox(self)
+        # self.header_size_spinBox.setValue(1)
+        # self.header_size_spinBox.setSingleStep(1)
+
     def initUI(self):
         self.setWindowIcon(QIcon(':/icon/icon'))
+
 
     def open_definition_dialog(self):
         format_dialog = FormatDefinitionDialog()
@@ -67,10 +93,11 @@ class ReadMultipleWellsFromFileDialog(
         file_textEdit.setReadOnly(True)
         layout.addWidget(file_textEdit)
         # read file and display text in lineedit
-        with open(self.fl_name, 'r') as fl:
-            string_list = fl.readlines(20)
-            file_textEdit.setText("\n".join(string_list))
-        preview_dialog.exec_()
+        if self.fl_name:
+            with open(self.fl_name, 'r') as fl:
+                string_list = fl.readlines(20)
+                file_textEdit.setText("\n".join(string_list))
+            preview_dialog.exec_()
 
     @pyqtSlot(list)
     def set_definition(self, definition):
