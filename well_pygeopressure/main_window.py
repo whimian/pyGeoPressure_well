@@ -185,6 +185,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         survey_select_dialog = SurveySelectDialog()
         survey_select_dialog.selectButton.clicked.connect(
             self.populate_data_list)
+        survey_select_dialog.selectButton.clicked.connect(
+            self.update_map_view)
         survey_select_dialog.exec_()
 
     @pyqtSlot()

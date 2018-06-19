@@ -40,6 +40,7 @@ class MapView(QWidget):
         # retaining aspect ratio when resizing
         self.ax.set_aspect(aspect='equal', anchor='C', adjustable='datalim')
         self.fig.tight_layout()
+        self.fig.canvas.draw()
 
     def draw_well_loc(self, x, y, well_names):
         # remove old well name tags
