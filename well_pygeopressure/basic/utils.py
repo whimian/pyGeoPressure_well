@@ -116,7 +116,7 @@ def read_survey_setting(json_file, parent_window):
 def discern_setting_from_gui(parent_window):
     "read survey settings from window widgets as a dict"
     dict_survey = dict()
-    dict_survey['name'] = parent_window.surveyNameLineEdit.text()
+    dict_survey['name'] = str(parent_window.surveyNameLineEdit.text())
     dict_survey["point_A"] = [
         int(parent_window.a_inline_text.text()),
         int(parent_window.a_crline_text.text()),
@@ -146,7 +146,7 @@ def discern_setting_from_gui(parent_window):
         parent_window.z_0_spinBox.value(),
         parent_window.z_1_spinBox.value(),
         parent_window.z_step_spinBox.value(),
-        parent_window.unitComboBox.currentText()
+        str(parent_window.unitComboBox.currentText())
     ]
     # it's a bug of pyqt4
     if isinstance(dict_survey['inline_range'], tuple):
