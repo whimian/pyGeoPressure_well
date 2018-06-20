@@ -42,17 +42,11 @@ class SmoothDialog(QDialog, Ui_smooth_Dialog):
         # buttons
         self.plot_horizon_Button.clicked.connect(self.draw_horizon)
         self.smooth_Button.clicked.connect(self.smooth)
+        self.save_Button.clicked.connect(self.save)
 
-        # self.initUI()
-
-        # self.P1 = []
-        # self.P2 = []
-        # self.norm_line_ax = []
-        # self.norm_line_ax2 = []
-        # self.init_color_dict()
         self.color_dict = CONF.color_dict
         self.horizon_line = []
-        # self.connect_id = None # needed for matplotlib to connect with event
+        self.smoothed_log = None
 
     def initUI(self):
         self.setWindowIcon(QIcon(':/icon/edit_icon'))
@@ -63,16 +57,7 @@ class SmoothDialog(QDialog, Ui_smooth_Dialog):
         self.update_well_comboBox()
         self.init_axes()
 
-        # self.two_points_groupBox.setVisible(False)
-
     def init_axes(self):
-        # self.matplotlib_widget.fig.delaxes(self.matplotlib_widget.axes)
-        # ax1 = self.matplotlib_widget.fig.add_subplot(121)
-        # self.matplotlib_widget.fig.add_subplot(122, sharey=ax1)
-        # self.matplotlib_widget.axes = self.matplotlib_widget.fig.axes
-        # self.ax = self.matplotlib_widget.axes[0]
-        # self.ax2 = self.matplotlib_widget.axes[1]
-        # self.ax2.set_yticklabels([])
         self.ax = self.matplotlib_widget.axes
         self.ax.invert_yaxis()
         plt.style.use(['seaborn-whitegrid', 'seaborn-paper'])
@@ -86,6 +71,7 @@ class SmoothDialog(QDialog, Ui_smooth_Dialog):
             self.well_comboBox.addItems(dnames)
 
     def update_log_comboBox(self):
+        self.log_comboBox.clear()
         well_name = self.well_comboBox.currentText()
         if well_name != "":
             well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
@@ -170,10 +156,25 @@ class SmoothDialog(QDialog, Ui_smooth_Dialog):
         window_size = int(self.window_lineEdit.text())
         to_smooth = log
 
-        smoothed_log = None
+        self.smoothed_log = None
         for _ in range(times):
-            smoothed_log = ppp.smooth_log(to_smooth, window_size)
-            to_smooth = smoothed_log
+            self.smoothed_log = ppp.smooth_log(to_smooth, window_size)
+            to_smooth = self.smoothed_log
         self.ax.plot(
-            smoothed_log.data, smoothed_log.depth, linewidth=0.5)
+            self.smoothed_log.data, self.smoothed_log.depth, linewidth=0.5)
         self.matplotlib_widget.fig.canvas.draw()
+
+    def save(self):
+        if self.smoothed_log is not None:
+            well_name = self.well_comboBox.currentText()
+            well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
+            log_name = str(self.log_comboBox.currentText())
+            log = well.get_log(log_name)
+
+            window_size = int(self.window_lineEdit.text())
+
+            well.add_log(
+                self.smoothed_log,
+                name=log_name+"_smooth{}".format(window_size),
+                unit=log.units)
+            well.save_well()
