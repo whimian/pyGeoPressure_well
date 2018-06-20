@@ -71,6 +71,7 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
             self.well_comboBox.addItems(dnames)
 
     def update_log_comboBox(self):
+        self.log_comboBox.clear()
         well_name = self.well_comboBox.currentText()
         if well_name != "":
             well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
@@ -169,5 +170,8 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
 
         upscaled_log = ppp.upscale_log(log, freq=freq)
 
-        well.add_log(upscaled_log, name=log_name+"_filter{}".format(freq))
+        well.add_log(
+            upscaled_log,
+            name=log_name+"_filter{}".format(freq),
+            unit=log.units)
         well.save_well()

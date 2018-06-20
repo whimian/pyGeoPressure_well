@@ -71,6 +71,8 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
             self.well_comboBox.addItems(dnames)
 
     def update_log_comboBox(self):
+        self.log_comboBox.clear()
+        self.sm_log_comboBox.clear()
         well_name = self.well_comboBox.currentText()
         if well_name != "":
             well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
@@ -81,11 +83,10 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
 
     def update_horizon_listWidget(self):
         self.horizon_listWidget.clear()
+        well_name = self.well_comboBox.currentText()
+        well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
         try:
-            well_name = self.well_comboBox.currentText()
-            well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
             horizons = well.params['horizon'].keys()
-            # self.horizon_listWidget.addItems(horizons)
             for name in horizons:
                 new_item = QListWidgetItem(name, self.horizon_listWidget)
                 new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
@@ -148,38 +149,35 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
         # get logs
         well_name = self.well_comboBox.currentText()
         well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
-
-        log = well.get_log(str(self.log_comboBox.currentText()))
-        # sm_log = well.get_log(str(self.sm_log_comboBox.currentText()))
-
-        # depth = np.array(log.depth)
-        # vel = np.array(log.data)
-
-        # Plot ----------------------------------------------------
-        self.ax.cla()
-        self.ax.plot(log.data, log.depth, color='gray', zorder=1,
-                     linewidth=0.5)
-        self.ax.set(title=well.well_name,
-                    xlabel=u"Density (g/cm3)", ylabel="Depth(MD) (m)")
-        self.ax.set_ylim(ymax=0)
-        self.ax.set_xlim(xmin=1)
-        self.matplotlib_widget.fig.canvas.draw()
+        log_name = str(self.log_comboBox.currentText())
+        if log_name:
+            log = well.get_log(log_name)
+            # Plot ----------------------------------------------------
+            self.ax.cla()
+            self.ax.plot(log.data, log.depth, color='gray', zorder=1,
+                         linewidth=0.5)
+            self.ax.set(title=well.well_name,
+                        xlabel=u"Density (g/cm3)", ylabel="Depth(MD) (m)")
+            self.ax.set_ylim(ymax=0)
+            self.ax.set_xlim(xmin=1)
+            self.matplotlib_widget.fig.canvas.draw()
 
     def plot_right_log(self):
         # get logs
         well_name = self.well_comboBox.currentText()
         well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
-
-        sm_log = well.get_log(str(self.sm_log_comboBox.currentText()))
-        # axis 2 -------------------------------------------------------
-        self.ax2.cla()
-        self.ax2.plot(sm_log.data, sm_log.depth, color='gray', zorder=1,
-                      linewidth=0.5)
-        self.ax2.set_ylim(ymax=0)
-        self.ax2.set_xlim(xmin=1)
-        self.ax2.set(title=well.well_name,
-                     xlabel=u"Density (g/cm3)", ylabel="Depth(MD) (m)")
-        self.matplotlib_widget.fig.canvas.draw()
+        log_name = str(self.sm_log_comboBox.currentText())
+        if log_name:
+            sm_log = well.get_log(log_name)
+            # axis 2 -------------------------------------------------------
+            self.ax2.cla()
+            self.ax2.plot(sm_log.data, sm_log.depth, color='gray', zorder=1,
+                        linewidth=0.5)
+            self.ax2.set_ylim(ymax=0)
+            self.ax2.set_xlim(xmin=1)
+            self.ax2.set(title=well.well_name,
+                        xlabel=u"Density (g/cm3)", ylabel="Depth(MD) (m)")
+            self.matplotlib_widget.fig.canvas.draw()
 
     def fit_button_on_clicked(self):
         # get well log

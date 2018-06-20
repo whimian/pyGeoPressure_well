@@ -69,6 +69,10 @@ class EatonDialog(QDialog, Ui_eaton_Dialog):
             self.well_comboBox.addItems(dnames)
 
     def update_log_comboBox(self):
+        self.velocity_comboBox.clear()
+        self.obp_comboBox.clear()
+        self.nct_comboBox.clear()
+        self.n_comboBox.clear()
         well_name = self.well_comboBox.currentText()
         if well_name != "":
             well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))

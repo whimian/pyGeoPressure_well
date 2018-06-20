@@ -81,6 +81,9 @@ class NctDialog(QDialog, Ui_nct_Dialog):
             self.well_comboBox.addItems(dnames)
 
     def update_log_comboBox(self):
+        self.log_comboBox.clear()
+        self.sm_log_comboBox.clear()
+        self.sh_log_comboBox.clear()
         well_name = self.well_comboBox.currentText()
         if well_name != "":
             well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
