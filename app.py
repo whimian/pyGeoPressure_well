@@ -20,7 +20,7 @@ from well_pygeopressure.config import CONF
 def parse_args(argv):
     #-------------------------------------
     # set pyGeoPressure core code path
-    core_path = "D:\\HUB\\Python\\PorePressurePrediction"
+    core_path = "E:\\HUB\\Python\\PorePressurePrediction"
     try:
         opts, args = getopt.getopt(argv, "hp:", ["path="])
     except getopt.GetoptError:
@@ -40,9 +40,12 @@ def parse_args(argv):
 def load_setting():
     current_file_path = Path(__file__)
     setting_file_path = Path(Path(current_file_path.parents[0]), "setting")
+    color_dict_path = Path(Path(current_file_path.parents[0]),
+                           "color_dict.json")
     # config.CONF.from_json(setting_file_path)
     CONF.from_json(setting_file_path)
     CONF.setting_abs_path = str(setting_file_path)
+    CONF.init_color_dict(color_dict_path)
 
 def main():
     parse_args(sys.argv[1:])

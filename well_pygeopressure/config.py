@@ -15,6 +15,11 @@ class Configuration(object):
         self.data_root = None
         self.current_survey = None
         self.setting_abs_path = None
+        self.color_dict = None
+
+    def init_color_dict(self, file_path):
+        with open(str(file_path), "r") as fl:
+            self.color_dict = json.load(fl)
 
     def from_json(self, json_file):
         with open(str(json_file), "r") as fl:

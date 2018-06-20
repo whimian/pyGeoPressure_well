@@ -44,7 +44,8 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
         self.upscale_Button.clicked.connect(self.upscale)
         self.save_Button.clicked.connect(self.save)
 
-        self.init_color_dict()
+        # self.init_color_dict()
+        self.color_dict = CONF.color_dict
         self.horizon_line = []
 
     def initUI(self):
@@ -170,40 +171,3 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
 
         well.add_log(upscaled_log, name=log_name+"_filter{}".format(freq))
         well.save_well()
-
-    def init_color_dict(self):
-        self.color_dict = {
-            # Seismic Horizon
-            'T10': 'khaki',
-            'T12': 'peru',
-            'T16': 'lightgreen',
-            'T20': 'green',
-            'T21': 'blue',
-            'T30': 'MidnightBlue',
-            # Hua Gang Group
-            'H1': '#eff6fc',
-            'H2': '#deebf7',
-            'H3': '#cde0f1',
-            'H4': '#b7d4ea',
-            'H5': '#9ac8e0',
-            'H6': '#77b5d9',
-            'H7': '#58a1cf',
-            'H8': '#3d8dc4',
-            'H9': '#2676b8',
-            'H10': '#1460a8',
-            'H11': '#084a91',
-            'H12': '#083370',
-            # Ping Hu Group
-            'P1': '#ffeee7',
-            'P2': '#fee0d2',
-            'P3': '#fdc6b0',
-            'P4': '#fcab8f',
-            'P5': '#fc8f6f',
-            'P6': '#fb7353',
-            'P7': '#f6553c',
-            'P8': '#ea362a',
-            'P9': '#d11e1f',
-            'P10': '#b71319',
-            'P11': '#980c13',
-            'P12': '#6d010e'
-        }

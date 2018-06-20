@@ -47,7 +47,8 @@ class DiscernShaleDialog(QDialog, Ui_discern_shale_Dialog):
         # self.P2 = []
         # self.norm_line_ax = []
         # self.norm_line_ax2 = []
-        self.init_color_dict()
+        # self.init_color_dict()
+        self.color_dict = CONF.color_dict
         self.horizon_line = []
         # self.connect_id = None # needed for matplotlib to connect with event
 
@@ -92,12 +93,15 @@ class DiscernShaleDialog(QDialog, Ui_discern_shale_Dialog):
         self.horizon_listWidget.clear()
         well_name = self.well_comboBox.currentText()
         well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
-        horizons = well.params['horizon'].keys()
-        # self.horizon_listWidget.addItems(horizons)
-        for name in horizons:
-            new_item = QListWidgetItem(name, self.horizon_listWidget)
-            new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
-            new_item.setCheckState(Qt.Unchecked)
+        try:
+            horizons = well.params['horizon'].keys()
+            # self.horizon_listWidget.addItems(horizons)
+            for name in horizons:
+                new_item = QListWidgetItem(name, self.horizon_listWidget)
+                new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
+                new_item.setCheckState(Qt.Unchecked)
+        except KeyError as e:
+            print(e.message)
 
     def draw_horizon(self):
         for line in self.horizon_line:
@@ -177,40 +181,3 @@ class DiscernShaleDialog(QDialog, Ui_discern_shale_Dialog):
             arrowprops=dict(facecolor='black', shrink=0.05, width=0.1,
                             headwidth=8))
         self.matplotlib_widget.fig.canvas.draw()
-
-    def init_color_dict(self):
-        self.color_dict = {
-            # Seismic Horizon
-            'T10': 'khaki',
-            'T12': 'peru',
-            'T16': 'lightgreen',
-            'T20': 'green',
-            'T21': 'blue',
-            'T30': 'MidnightBlue',
-            # Hua Gang Group
-            'H1': '#eff6fc',
-            'H2': '#deebf7',
-            'H3': '#cde0f1',
-            'H4': '#b7d4ea',
-            'H5': '#9ac8e0',
-            'H6': '#77b5d9',
-            'H7': '#58a1cf',
-            'H8': '#3d8dc4',
-            'H9': '#2676b8',
-            'H10': '#1460a8',
-            'H11': '#084a91',
-            'H12': '#083370',
-            # Ping Hu Group
-            'P1': '#ffeee7',
-            'P2': '#fee0d2',
-            'P3': '#fdc6b0',
-            'P4': '#fcab8f',
-            'P5': '#fc8f6f',
-            'P6': '#fb7353',
-            'P7': '#f6553c',
-            'P8': '#ea362a',
-            'P9': '#d11e1f',
-            'P10': '#b71319',
-            'P11': '#980c13',
-            'P12': '#6d010e'
-        }
