@@ -42,16 +42,10 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
         # buttons
         self.plot_horizon_Button.clicked.connect(self.draw_horizon)
         self.upscale_Button.clicked.connect(self.upscale)
+        self.save_Button.clicked.connect(self.save)
 
-        # self.initUI()
-
-        # self.P1 = []
-        # self.P2 = []
-        # self.norm_line_ax = []
-        # self.norm_line_ax2 = []
         self.init_color_dict()
         self.horizon_line = []
-        # self.connect_id = None # needed for matplotlib to connect with event
 
     def initUI(self):
         self.setWindowIcon(QIcon(':/icon/edit_icon'))
@@ -62,16 +56,7 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
         self.update_well_comboBox()
         self.init_axes()
 
-        # self.two_points_groupBox.setVisible(False)
-
     def init_axes(self):
-        # self.matplotlib_widget.fig.delaxes(self.matplotlib_widget.axes)
-        # ax1 = self.matplotlib_widget.fig.add_subplot(121)
-        # self.matplotlib_widget.fig.add_subplot(122, sharey=ax1)
-        # self.matplotlib_widget.axes = self.matplotlib_widget.fig.axes
-        # self.ax = self.matplotlib_widget.axes[0]
-        # self.ax2 = self.matplotlib_widget.axes[1]
-        # self.ax2.set_yticklabels([])
         self.ax = self.matplotlib_widget.axes
         self.ax.invert_yaxis()
         plt.style.use(['seaborn-whitegrid', 'seaborn-paper'])
@@ -94,12 +79,14 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
         self.horizon_listWidget.clear()
         well_name = self.well_comboBox.currentText()
         well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
-        horizons = well.params['horizon'].keys()
-        # self.horizon_listWidget.addItems(horizons)
-        for name in horizons:
-            new_item = QListWidgetItem(name, self.horizon_listWidget)
-            new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
-            new_item.setCheckState(Qt.Unchecked)
+        try:
+            horizons = well.params['horizon'].keys()
+            for name in horizons:
+                new_item = QListWidgetItem(name, self.horizon_listWidget)
+                new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
+                new_item.setCheckState(Qt.Unchecked)
+        except KeyError as e:
+            print(e.message)
 
     def draw_horizon(self):
         for line in self.horizon_line:
@@ -170,6 +157,19 @@ class UpscaleDialog(QDialog, Ui_upscale_Dialog):
             upscaled_log.data, upscaled_log.depth, linewidth=0.5)
         self.matplotlib_widget.fig.canvas.draw()
 
+    def save(self):
+        """Save upscaled log to well"""
+        well_name = self.well_comboBox.currentText()
+        well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
+        log_name = str(self.log_comboBox.currentText())
+        log = well.get_log(log_name)
+
+        freq = int(self.freq_spinBox.value())
+
+        upscaled_log = ppp.upscale_log(log, freq=freq)
+
+        well.add_log(upscaled_log, name=log_name+"_filter{}".format(freq))
+        well.save_well()
 
     def init_color_dict(self):
         self.color_dict = {
