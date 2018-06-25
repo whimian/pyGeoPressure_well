@@ -46,6 +46,7 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
         self.clear_Button.clicked.connect(self.clear_lines)
         self.draw_Button.clicked.connect(self.draw_line_with_a_b)
         self.extrapolate_Button.clicked.connect(self.extrapolate)
+        self.save_Button.clicked.connect(self.save)
         # self.P1 = []
         # self.P2 = []
         self.fit_line_ax = []
@@ -54,6 +55,7 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
         self.color_dict = CONF.color_dict
         self.horizon_line = []
         # self.connect_id = None # needed for matplotlib to connect with event
+        self.extraploated_log = None
 
     def initUI(self):
         self.setWindowIcon(QIcon(':/icon/edit_icon'))
@@ -92,7 +94,8 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
                 new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
                 new_item.setCheckState(Qt.Unchecked)
         except KeyError as e:
-            print(e.message)
+            # print(e.message)
+            pass
 
     def draw_horizon(self):
         for line in self.horizon_line:
@@ -172,11 +175,11 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
             # axis 2 -------------------------------------------------------
             self.ax2.cla()
             self.ax2.plot(sm_log.data, sm_log.depth, color='gray', zorder=1,
-                        linewidth=0.5)
+                          linewidth=0.5)
             self.ax2.set_ylim(ymax=0)
             self.ax2.set_xlim(xmin=1)
             self.ax2.set(title=well.well_name,
-                        xlabel=u"Density (g/cm3)", ylabel="Depth(MD) (m)")
+                         xlabel=u"Density (g/cm3)", ylabel="Depth(MD) (m)")
             self.matplotlib_widget.fig.canvas.draw()
 
     def fit_button_on_clicked(self):
@@ -277,6 +280,29 @@ class ExtrapolateDialog(QDialog, Ui_extrapolate_Dialog):
         old_den = np.array(sm_log.data)
         old_mask = np.isfinite(old_den)
         new_den[old_mask] = old_den[old_mask]
+
+        self.extraploated_log = ppp.Log()
+        self.extraploated_log.depth = sm_log.depth
+        self.extraploated_log.data = new_den
+        self.extraploated_log.units = sm_log.units
         # self.fit_line_ax.append(self.ax.plot(new_den, log.depth)[0])
         self.fit_line_ax2.append(self.ax2.plot(new_den, log.depth)[0])
         self.matplotlib_widget.fig.canvas.draw()
+
+    def save(self):
+        if self.extraploated_log is not None:
+            well_name = self.well_comboBox.currentText()
+            well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
+            log_name = str(self.log_comboBox.currentText())
+            log = well.get_log(log_name)
+            try:
+                well.add_log(
+                    self.extraploated_log,
+                    name=log_name+"_extra",
+                    unit=log.units)
+                well.save_well()
+                QMessageBox.information(
+                    self, "Message", "{}".format("Succeed!"))
+            except Exception as ex:
+                QMessageBox.warning(
+                    self, "Message", "{}".format(ex.message))

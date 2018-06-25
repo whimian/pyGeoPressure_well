@@ -44,17 +44,11 @@ class ObpDialog(QDialog, Ui_obp_Dialog):
         # buttons
         self.plot_horizon_Button.clicked.connect(self.draw_horizon)
         self.obp_Button.clicked.connect(self.obp_button_on_clicked)
-        # self.clear_Button.clicked.connect(self.clear_lines)
-        # self.draw_Button.clicked.connect(self.draw_line_with_a_b)
-        # self.extrapolate_Button.clicked.connect(self.extrapolate)
-        # self.P1 = []
-        # self.P2 = []
-        # self.fit_line_ax = []
-        # self.fit_line_ax2 = []
-        # self.init_color_dict()
+        self.save_Button.clicked.connect(self.save)
+
         self.color_dict = CONF.color_dict
         self.horizon_line = []
-        # self.connect_id = None # needed for matplotlib to connect with event
+        self.obp_log = None
 
     def initUI(self):
         self.setWindowIcon(QIcon(':/icon/edit_icon'))
@@ -204,6 +198,11 @@ class ObpDialog(QDialog, Ui_obp_Dialog):
                                       kelly_bushing=kb,
                                       depth_w=wd,
                                       rho_w=rho_w)
+
+        self.obp_log = ppp.Log()
+        self.obp_log.depth = depth
+        self.obp_log.data = obp
+
         self.ax2.cla()
         self.ax2.plot(obp, depth)
         self.ax2.plot(ppp.hydrostatic_pressure(np.array(depth),
@@ -257,24 +256,18 @@ class ObpDialog(QDialog, Ui_obp_Dialog):
         self.fit_line_ax2.append(self.ax2.plot(new_den, log.depth)[0])
         self.matplotlib_widget.fig.canvas.draw()
 
-    def extrapolate(self):
-        # get well log
-        well_name = self.well_comboBox.currentText()
-        well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
-        log = well.get_log(str(self.log_comboBox.currentText()))
-        sm_log = well.get_log(str(self.sm_log_comboBox.currentText()))
-        # get a, b
-        a, b = float(self.a_lineEdit.text()), float(self.b_lineEdit.text())
-        shift = well.kelly_bushing + well.water_depth
-        shift_depth = np.array(log.depth)
-        mask = shift_depth >= shift
-        shift_depth = shift_depth[mask]
-        new_den = np.full_like(np.array(log.data), np.nan)
-        new_den[mask] = ppp.traugott(shift_depth, a, b)
-
-        old_den = np.array(sm_log.data)
-        old_mask = np.isfinite(old_den)
-        new_den[old_mask] = old_den[old_mask]
-        # self.fit_line_ax.append(self.ax.plot(new_den, log.depth)[0])
-        self.fit_line_ax2.append(self.ax2.plot(new_den, log.depth)[0])
-        self.matplotlib_widget.fig.canvas.draw()
+    def save(self):
+        if self.obp_log is not None:
+            well_name = self.well_comboBox.currentText()
+            well = ppp.Well(str(CONF.well_dir / ".{}".format(well_name)))
+            try:
+                well.add_log(
+                    self.obp_log,
+                    name="Overburden_Pressure",
+                    unit="mPa")
+                well.save_well()
+                QMessageBox.information(
+                    self, "Message", "{}".format("Succeed!"))
+            except Exception as ex:
+                QMessageBox.warning(
+                    self, "Message", "{}".format(ex.message))

@@ -89,7 +89,8 @@ class SmoothDialog(QDialog, Ui_smooth_Dialog):
                 new_item.setFlags(new_item.flags() | Qt.ItemIsUserCheckable)
                 new_item.setCheckState(Qt.Unchecked)
         except KeyError as e:
-            print(e.message)
+            # print(e.message)
+            pass
 
     def draw_horizon(self):
         for line in self.horizon_line:
